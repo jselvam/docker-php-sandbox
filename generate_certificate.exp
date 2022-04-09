@@ -1,0 +1,63 @@
+#!/usr/bin/expect -f
+
+# -------------------------
+# Generate private key file
+# -------------------------
+
+spawn openssl genrsa -des3 -out ca.key 2048
+
+expect "Enter pass phrase for ca.key:"
+send -- "test\r"
+expect "Verifying - Enter pass phrase for ca.key:"
+send -- "test\r"
+
+# ------------------------------------
+# Generate certificate signing request
+# ------------------------------------
+
+spawn openssl req -new -key ca.key -out ca.csr
+
+expect "Enter pass phrase for ca.key:"
+send -- "test\r"
+expect "Country Name (2 letter code)"
+send -- "US\r"
+expect "State or Province Name (full name)"
+send -- "State\r"
+expect "Locality Name (eg, city)"
+send -- "City\r"
+expect "Organization Name (eg, company)"
+send -- "Company\r"
+expect "Organizational Unit Name (eg, section)"
+send -- "Section\r"
+expect "Common Name (eg, your name or your server's hostname)"
+send -- "localhost\r"
+expect "Email Address"
+send -- "email@localhost\r"
+
+expect "A challenge password"
+send -- "\r"
+
+expect "An optional company name"
+send -- "\r"
+
+# --------------------
+# Generate certificate
+# --------------------
+
+spawn openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt
+
+expect "Enter pass phrase for ca.key:"
+send -- "test\r"
+
+# ---------------------------
+# Remove certificate password
+# ---------------------------
+
+exec cp ca.key ca.tmp
+
+spawn openssl rsa -in ca.tmp -out ca.key
+
+expect "Enter pass phrase for ca.tmp:"
+send -- "test\r"
+
+exec rm ca.tmp
