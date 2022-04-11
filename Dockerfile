@@ -14,9 +14,17 @@ RUN  yum -y install yum-utils
 # Web Server Apache HTTPD installation and configuratioin.
 RUN yum -y install httpd; yum clean all; systemctl enable httpd.service
 
-RUN yum -y install php73 php73-php-fpm php73-mysqlnd php73-zip php73-devel php73-gd php73-mcrypt php73-mbstring php73-curl php73-xml php73-pear php73-bcmath php73-json php73-pdo php73-pecl-memcached php73-pecl-apcu-devel
-RUN yum -y install php56 php56-php-fpm php56-mysqlnd php56-zip php56-devel php56-gd php56-mcrypt php56-mbstring php56-curl php56-xml php56-pear php56-bcmath php56-json php56-pdo php56-pecl-memcached php56-pecl-apcu-devel
-RUN yum -y install php80 php80-php-fpm php80-mysqlnd php80-zip php80-devel php80-gd php80-mcrypt php80-mbstring php80-curl php80-xml php80-pear php80-bcmath php80-json php80-pdo php80-pecl-memcached php80-pecl-apcu-devel
+RUN yum -y install libicu
+RUN yum -y install libicu-devel
+
+RUN yum-config-manager --enable remi-php56
+RUN yum -y install php56 php56-php-cli php56-php-fpm php56-php-intl php56-php-php-devel php56-php-mysqlnd php56-php-zip php56-php-gd php56-php-mcrypt php56-php-mbstring php56-php-curl php56-php-xml php56-php-pear php56-php-bcmath php56-php-json php56-php-pdo php56-php-pecl-memcached php56-php-pecl-apcu-devel
+
+RUN yum-config-manager --enable remi-php73
+RUN yum -y  install php73 php73-php-cli php73-php-fpm php73-php-intl php73-php-devel php73-php-mysqlnd php73-php-zip php73-php-devel php73-php-gd php73-php-mcrypt php73-php-mbstring php73-php-curl php73-php-xml php73-php-pear php73-php-bcmath php73-json php73-php-pdo php73-php-pecl-memcached php73-php-pecl-apcu-devel
+
+RUN yum-config-manager --enable remi-php80
+RUN yum -y  install php80 php80-php-cli php80-php-fpm php80-php-intl php80-php-devel php80-php-mysqlnd php80-php-zip php80-php-devel php80-php-gd php80-php-mcrypt php80-php-mbstring php80-php-curl php80-php-xml php80-php-pear php80-php-bcmath php80-php-json php80-php-pdo php80-php-pecl-memcached php80-php-pecl-apcu-devel
 
 RUN mkdir -p "/etc/httpd/ssl-certificates"
 # Setting default PHP version 7.3
